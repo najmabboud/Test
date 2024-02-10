@@ -1,6 +1,8 @@
 import os
 import sqlite3
-
+import pywebio
+from pywebio.input import *
+from pywebio.output import *
 # الحصول على مسار وحدة التخزين الداخلية
 internal_storage = os.path.expanduser("~")
 
@@ -30,6 +32,6 @@ cursor.execute("INSERT INTO employees VALUES (2, 'Jane Smith', 25)")
 # حفظ التغييرات وإغلاق اتصال قاعدة البيانات
 conn.commit()
 conn.close()
-
+put_text("gg",database_path)
 print("تم إنشاء قاعدة البيانات بنجاح في المجلد:", folder_path)
 print("مسار قاعدة البيانات:", database_path)
