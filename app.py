@@ -1,6 +1,6 @@
 #import sqlite3
 #import os
-import sqlite
+import pysqlite3
 from pywebio.platform.flask import webio_view
 from flask import Flask
 import pywebio
