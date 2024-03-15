@@ -1,3 +1,4 @@
-os
-sqlite3
 pywebio
+flask
+os-sys
+db-sqlite3
