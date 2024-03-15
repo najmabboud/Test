@@ -1,37 +1,45 @@
-import os
 import sqlite3
+import os
+from pywebio.platform.flask import webio_view
+from flask import Flask
 import pywebio
 from pywebio.input import *
 from pywebio.output import *
-# الحصول على مسار وحدة التخزين الداخلية
-internal_storage = os.path.expanduser("~")
+from pywebio.session import *
 
-# اسم المجلد
-folder_name = "my_database_folder"
 
-# الحصول على مسار المجلد
-folder_path = os.path.join(internal_storage, folder_name)
 
-# إنشاء المجلد إذا لم يكن موجودًا بالفعل
-os.makedirs(folder_path, exist_ok=True)
 
-# المسار الكامل لملف قاعدة البيانات
-database_path = os.path.join(folder_path, "my_database.db")
+app = Flask(__name__)
 
-# إنشاء اتصال بقاعدة البيانات
-conn = sqlite3.connect(database_path)
 
-# إنشاء جدول في قاعدة البيانات
-cursor = conn.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS employees (id INT, name TEXT, age INT)")
 
-# إضافة بيانات افتراضية
-cursor.execute("INSERT INTO employees VALUES (1, 'John Doe', 30)")
-cursor.execute("INSERT INTO employees VALUES (2, 'Jane Smith', 25)")
+def create_database():
+    # إنشاء المجلد "database" إذا لم يكن موجودًا
+    if not os.path.exists('database'):
+        os.makedirs('database')
 
-# حفظ التغييرات وإغلاق اتصال قاعدة البيانات
-conn.commit()
-conn.close()
-put_text("gg",database_path)
-print("تم إنشاء قاعدة البيانات بنجاح في المجلد:", folder_path)
-print("مسار قاعدة البيانات:", database_path)
+    # الاتصال بقاعدة البيانات أو إنشاؤها إذا لم تكن موجودة
+    conn = sqlite3.connect('database/users.db')
+
+    # إنشاء جدول "user" إذا لم يكن موجودًا
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS user
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                       username TEXT,
+                       email TEXT,
+                       password TEXT)''')
+    conn.commit()
+
+    # إغلاق الاتصال بقاعدة البيانات
+    conn.close()
+    popup("yes")
+
+
+app.add_url_rule('/','main',webio_view(create_database)),
+             
+
+
+if __name__ == '__main__'
+    app.run(port=1234)
+    print('hello'
