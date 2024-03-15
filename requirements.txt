@@ -1,5 +1,5 @@
 pywebio
 flask
 os-sys
-db-sqlite3
+sqlite-database
 gunicorn
