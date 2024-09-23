@@ -7,7 +7,7 @@ import numpy as np
 import math
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
-from ctypes import cast, POINTER
+from ctypes import cast,POINTER
 
 wcam = 1280
 hcam = 780
