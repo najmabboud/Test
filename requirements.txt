@@ -1,7 +1,7 @@
 os-win
 gunicorn
 flask
-
+glob2
 opencv-python
 mediapipe
 threaded
