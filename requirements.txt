@@ -1,5 +1,3 @@
-pywebio
-flask
-pysqlite3
 
+flask
 gunicorn
