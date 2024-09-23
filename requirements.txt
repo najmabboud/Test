@@ -1,3 +1,12 @@
-opencv-python
-flask
+
 gunicorn
+flask
+os-sys
+opencv-python
+mediapipe
+threaded
+numpy
+python-math
+pycaw
+comtypes
+ctypes-callable
