@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template_string, send_from_directory
-import os
 import cv2
 import mediapipe as mp
 import threading
@@ -7,8 +6,10 @@ import numpy as np
 import math
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
-from ctypes import cast,POINTER
-
+from ctypes import cast, POINTER
+import glob
+import os
+from ctypes import HRESULT
 wcam = 1280
 hcam = 780
 
@@ -35,6 +36,7 @@ volbar = 400
 volbarr = 0
 camera_running = False
 app = Flask(__name__)
+
 def control_volume():
     global camera_running
     while camera_running:
@@ -85,13 +87,16 @@ def index():
 
     if request.method == 'POST':
         music_path = request.form['music_path'].strip()
-        if os.path.isdir(music_path):
-            music_files = [f for f in os.listdir(music_path) if f.endswith(('.mp3', '.wav', '.ogg'))]
-            if music_files:
-                camera_running = True
-                threading.Thread(target=control_volume).start()
+        # استخدام glob للبحث عن الملفات
+        music_files = glob.glob(os.path.join(music_path, '*.[Mm][Pp]3')) + \
+                      glob.glob(os.path.join(music_path, '*.[Ww][Aa][Vv]')) + \
+                      glob.glob(os.path.join(music_path, '*.[Oo][Gg][Gg]'))
+                      
+        if music_files:
+            camera_running = True
+            threading.Thread(target=control_volume).start()
         else:
-            music_files = ["Invalid directory"]
+            music_files = ["Invalid directory or no music files found"]
 
     return render_template_string('''
     <!doctype html>
@@ -110,9 +115,9 @@ def index():
         <ul>
             {% for file in music_files %}
                 <li>
-                    {{ file }} 
+                    {{ file.split('/')[-1] }} 
                     <audio controls>
-                        <source src="{{ url_for('serve_music', filename=file, path=music_path) }}" type="audio/mpeg">
+                        <source src="{{ url_for('serve_music', filename=file.split('/')[-1], path=music_path) }}" type="audio/mpeg">
                         Your browser does not support the audio tag.
                     </audio>
                 </li>
@@ -120,7 +125,7 @@ def index():
         </ul>
     </body>
     </html>
-    ''', music_files=music_files, music_path=music_path)
+    ''', music_files=[os.path.basename(f) for f in music_files], music_path=music_path)
 
 @app.route('/music/<path:path>/<filename>')
 def serve_music(path, filename):
