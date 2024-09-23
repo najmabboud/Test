@@ -1,7 +1,7 @@
 
 gunicorn
 flask
-os-sys
+
 opencv-python
 mediapipe
 threaded
