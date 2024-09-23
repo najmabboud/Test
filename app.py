@@ -30,9 +30,7 @@ def open_camera():
         # عرض الإطار
         cv2.imshow('Camera', frame)
 
-        # إنهاء الحلقة عند الضغط على 'q'
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        
 
     # تحرير الكاميرا وإغلاق النوافذ
     cap.release()
